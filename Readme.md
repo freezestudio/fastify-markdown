@@ -3,7 +3,7 @@
 [![Greenkeeper badge](https://badges.greenkeeper.io/fastify/fastify-plugin.svg)](https://greenkeeper.io/)
 
 [![js-standard-style](https://img.shields.io/badge/code%20style-standard-brightgreen.svg?style=flat)](http://standardjs.com/)
-[![Build Status](https://travis-ci.org/fastify/fastify-plugin.svg?branch=master)](https://travis-ci.org/fastify/fastify-plugin)
+[![Build Status](https://travis-ci.org/freezestudio/fastify-markdown.svg?branch=master)](https://travis-ci.org/freezestudio/fastify-markdown)
 
 `fastify-markdown` is a plugin for [Fastify](https://github.com/fastify/fastify) parse markdown code or file.
 
