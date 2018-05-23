@@ -19,7 +19,11 @@ function fastifymarkdown (fastify, opts, done) {
       return marked(opts.data)
     } else if (opts.src) {
       const read = util.promisify(fs.readFile)
-      return read(opts.src, 'utf8')
+      return read(opts.src, 'utf8').then(src => {
+        return marked(src)
+      }, err => {
+        return err
+      })
     } else {
       if (opts.markedOptions) {
         return marked.setOptions(opts.markedOptions)

@@ -8,7 +8,9 @@ const plugin = require('../')
 test('Should markdwon with opts.data is', t => {
   t.plan(2)
   const fastify = Fastify()
-  fastify.register(plugin, { data: `# Title **BOLD**` })
+  fastify.register(plugin, {
+    data: `# Title **BOLD**`
+  })
   fastify.get('/test1', (req, reply) => {
     const md = reply.markdown()
     reply.send(md)
@@ -25,11 +27,11 @@ test('Should markdwon with opts.data is', t => {
 test('Should markdown with opts.src is', t => {
   t.plan(2)
   const fastify = Fastify()
-  fastify.register(plugin, { src: path.join(__dirname, '..', 'Readme.md') })
+  fastify.register(plugin, {
+    src: path.join(__dirname, '..', 'Readme.md')
+  })
   fastify.get('/test2', (req, reply) => {
-    reply.markdown().then(md => {
-      reply.send(md)
-    })
+    return reply.markdown()
   })
   fastify.inject({
     url: '/test2',
@@ -40,19 +42,43 @@ test('Should markdown with opts.src is', t => {
   })
 })
 
+test('Should markdown with opts.src is incorrect', t => {
+  t.plan(2)
+  const fastify = Fastify()
+  fastify.register(plugin, {
+    src: 'empty'
+  })
+  fastify.get('/test3', (req, reply) => {
+    reply.markdown().then(md => {
+      reply.send(md)
+    }).catch(err => {
+      reply.send(err)
+    })
+  })
+  fastify.inject({
+    url: '/test3',
+    method: 'GET'
+  }, (err, res) => {
+    t.error(err)
+    t.strictEqual(JSON.parse(res.payload).statusCode, 500)
+  })
+})
+
 test('Should markdown with opts.markedOptions is', t => {
   t.plan(2)
   const testOptions = {
     gfm: false
   }
   const fastify = Fastify()
-  fastify.register(plugin, { markedOptions: testOptions })
-  fastify.get('/test3', (req, reply) => {
+  fastify.register(plugin, {
+    markedOptions: testOptions
+  })
+  fastify.get('/test4', (req, reply) => {
     const gfm = reply.markdown().defaults.gfm
     reply.send(gfm)
   })
   fastify.inject({
-    url: '/test3',
+    url: '/test4',
     method: 'GET'
   }, (err, res) => {
     t.error(err)
@@ -64,12 +90,12 @@ test('Should markdown without opts is', t => {
   t.plan(2)
   const fastify = Fastify()
   fastify.register(plugin /*, opts */)
-  fastify.get('/test4', (req, reply) => {
+  fastify.get('/test5', (req, reply) => {
     const md = reply.markdown().parse(`# Title **BOLD**`)
     reply.send(md)
   })
   fastify.inject({
-    url: '/test4',
+    url: '/test5',
     method: 'GET'
   }, (err, res) => {
     t.error(err)

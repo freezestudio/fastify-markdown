@@ -7,11 +7,11 @@
 
 `fastify-markdown` is a plugin for [Fastify](https://github.com/fastify/fastify) parse markdown code or file.
 
-#### Install
+## Install
 
 npm install --save fastify-markdown
 
-#### Usage
+## Usage
 
 ```js
 const path = require('path')
@@ -23,7 +23,25 @@ const fastify = require('fastify')({ logger: { level: 'trace' } })
 fastify
   .register(require('fastify-markdown'), { src: path.join(__dirname, '..', 'Readme.md') })
   .get('/', (req, reply) => {
-    reply.markdown().then(md => { reply.send(md) })
+    return reply.markdown()
+  })
+  .listen(3000, err => {
+    if (err) throw err
+    else console.log('server running on http://localhost:3000 ...')
+  })
+
+/* -- or --*/
+
+/**
+ * async using opts.src from file
+ */
+fastify
+  .register(require('../'), {
+    src: path.join(__dirname, '..', 'Readme.md')
+  })
+  .get('/', async (req, reply) => {
+    const md = await reply.markdown()
+    return md
   })
   .listen(3000, err => {
     if (err) throw err
@@ -47,7 +65,7 @@ fastify
 /**
  * using internal marked's options
  */
-const testOptions ={
+const testOptions = {
   gfm: false
 }
 

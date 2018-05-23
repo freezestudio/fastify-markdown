@@ -1,18 +1,40 @@
 const path = require('path')
-const fastify = require('fastify')({ logger: { level: 'trace' } })
+const fastify = require('fastify')({
+  logger: {
+    level: 'trace'
+  }
+})
 
 /**
  * using opts.src from file
  */
 fastify
-  .register(require('../'), { src: path.join(__dirname, '..', 'Readme.md') })
+  .register(require('../'), {
+    src: path.join(__dirname, '..', 'Readme.md')
+  })
   .get('/', (req, reply) => {
-    reply.markdown().then(md => { reply.send(md) })
+    return reply.markdown()
   })
   .listen(3000, err => {
     if (err) throw err
     else console.log('server running on http://localhost:3000 ...')
   })
+
+/**
+ * async using opts.src from file
+ */
+// fastify
+//   .register(require('../'), {
+//     src: path.join(__dirname, '..', 'Readme.md')
+//   })
+//   .get('/', async (req, reply) => {
+//     const md = await reply.markdown()
+//     return md
+//   })
+//   .listen(3000, err => {
+//     if (err) throw err
+//     else console.log('server running on http://localhost:3000 ...')
+//   })
 
 /**
  * using opts.data direct literal
