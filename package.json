@@ -1,0 +1,43 @@
+{
+  "name": "fastify-markdown",
+  "version": "0.0.1",
+  "description": "Plugin for markdown parser",
+  "main": "index.js",
+  "scripts": {
+    "test": "npm run lint && npm run unit",
+    "lint": "standard | snazzy",
+    "unit": "tap test",
+    "example": "node example/server.js",
+    "coverage": "tap --cov --coverage-report=html test",
+    "voveralls": "tap *.test.js --cov"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/freezestudio/fastify-markdown.git"
+  },
+  "keywords": [
+    "fastify",
+    "markdown"
+  ],
+  "author": "freezestudio",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/freezestudio/fastify-markdown/issues"
+  },
+  "homepage": "https://github.com/freezestudio/fastify-markdown#readme",
+  "dependencies": {
+    "fastify-plugin": "^1.0.1",
+    "marked": "^0.3.19"
+  },
+  "devDependencies": {
+    "coveralls": "^3.0.1",
+    "fastify": "^1.4.0",
+    "fastify-compress": "^0.6.0",
+    "pre-commit": "^1.2.2",
+    "proxyquire": "^2.0.1",
+    "request": "^2.87.0",
+    "snazzy": "^7.1.1",
+    "standard": "^11.0.1",
+    "tap": "^12.0.1"
+  }
+}
