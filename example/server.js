@@ -6,30 +6,14 @@ const fastify = require('fastify')({
 })
 
 /**
- * using opts.src from file
- */
-fastify
-  .register(require('../'), {
-    src: path.join(__dirname, '..', 'Readme.md')
-  })
-  .get('/', (req, reply) => {
-    return reply.markdown()
-  })
-  .listen(3000, err => {
-    if (err) throw err
-    else console.log('server running on http://localhost:3000 ...')
-  })
-
-/**
- * async using opts.src from file
+ * using opts.src = 'file'
  */
 // fastify
 //   .register(require('../'), {
-//     src: path.join(__dirname, '..', 'Readme.md')
+//     src: path.join(__dirname, '..', 'Readme.md'), markedOptions: {gfm: false}
 //   })
-//   .get('/', async (req, reply) => {
-//     const md = await reply.markdown()
-//     return md
+//   .get('/', (req, reply) => {
+//     return reply.markdown()
 //   })
 //   .listen(3000, err => {
 //     if (err) throw err
@@ -37,33 +21,60 @@ fastify
 //   })
 
 /**
- * using opts.data direct literal
+ * using opts.src = true
  */
-// fastify
-//   .register(require('../'), { data: `# Title **BOLD**` })
-//   .get('/', (req, reply) => {
-//       const md = reply.markdown()
-//       reply.send(md)
-//   })
-//   .listen(3000, err => {
-//       if (err) throw err
-//       else console.log('server running on http://localhost:3000 ...')
-//   })
+fastify
+  .register(require('../'), {
+    src: true, markedOptions: {gfm: false}
+  })
+  .get('/', (req, reply) => {
+    return reply.markdown(path.join(__dirname, '..', 'Readme.md'))
+  })
+  .listen(3000, err => {
+    if (err) throw err
+    else console.log('server running on http://localhost:3000 ...')
+  })
 
 /**
- * using marked's options
+ * using opts.data = true
  */
-// const testOptions ={
-//   gfm: false
-// }
-
 // fastify
-//   .register(require('../'), { markedOptions: testOptions })
-//   .get('/', (req, reply) => {
-//       const opts = reply.markdown().defaults
-//       reply.send(opts)
-//   })
-//   .listen(3000, err => {
-//       if (err) throw err
-//       else console.log('server running on http://localhost:3000 ...')
-//   })
+// .register(require('../'), {
+//   data: true, markedOptions: {gfm: false}
+// })
+// .get('/', (req, reply) => {
+//   const md = reply.markdown('**BOLD**')
+//   reply.send(md)
+// })
+// .listen(3000, err => {
+//   if (err) throw err
+//   else console.log('server running on http://localhost:3000 ...')
+// })
+
+/**
+ * default marked data
+ */
+// fastify
+// .register(require('../'))
+// .get('/', (req, reply) => {
+//   const md = reply.markdown('**BOLD**')
+//   reply.send(md)
+// })
+// .listen(3000, err => {
+//   if (err) throw err
+//   else console.log('server running on http://localhost:3000 ...')
+// })
+
+/**
+ * using internal marked and options
+ */
+// fastify
+// .register(require('../'))
+// .get('/', (req, reply) => {
+//   const md = reply.markdown().parse('**BOLD**', {breaks: true})
+//   reply.send(md)
+// })
+// .listen(3000, err => {
+//   if (err) throw err
+//   else console.log('server running on http://localhost:3000 ...')
+// })

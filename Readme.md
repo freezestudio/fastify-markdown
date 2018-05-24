@@ -21,9 +21,9 @@ const fastify = require('fastify')({ logger: { level: 'trace' } })
  * using opts.src read markdown from file
  */
 fastify
-  .register(require('fastify-markdown'), { src: path.join(__dirname, '..', 'Readme.md') })
+  .register(require('fastify-markdown'), { src: true })
   .get('/', (req, reply) => {
-    return reply.markdown()
+    return reply.markdown(path.join(__dirname, '..', 'Readme.md'))
   })
   .listen(3000, err => {
     if (err) throw err
@@ -52,7 +52,7 @@ fastify
  * using opts.data parse markdown direct literal
  */
 fastify
-  .register(require('fastify-markdown'), { data: `# Title **BOLD**` })
+  .register(require('fastify-markdown'), { data: `**BOLD**` })
   .get('/', (req, reply) => {
       const md = reply.markdown()
       reply.send(md)
@@ -72,8 +72,8 @@ const testOptions = {
 fastify
   .register(require('fastify-markdown'), { markedOptions: testOptions })
   .get('/', (req, reply) => {
-      const opts = reply.markdown().defaults
-      reply.send(opts)
+      const md = reply.markdown('**BOLD**')
+      reply.send(md)
   })
   .listen(3000, err => {
       if (err) throw err
@@ -96,21 +96,26 @@ fastify
 
 ```
 
-## Options
+## Options (Optional)
 
-**src** (string)
+**src** (boolean | string)
 
-the .md file path
+true: Means to resolve the markdown file
+the .md file path.
+If the `data` option is set, this option will be ignored.
 
-**data** (string)
+**data** (boolean | string)
 
-a string that conforms to the markdown syntax
+true: Means to resolve the markdown data
+or a string that conforms to the markdown syntax
 
 **markedOptions** (object)
 
 marked options used
 
 See [marked](https://github.com/markedjs/marked) and [fastify](https://github.com/fastify/fastify) for more options
+
+All options are optional.
 
 ## License
 
