@@ -37,10 +37,10 @@ fastify
  */
 fastify
   .register(require('../'), {
-    src: path.join(__dirname, '..', 'Readme.md')
+    src: true, markedOptions: { gfm: false }
   })
   .get('/', async (req, reply) => {
-    const md = await reply.markdown()
+    const md = await reply.markdown(path.join(__dirname, '..', 'Readme.md'))
     return md
   })
   .listen(3000, err => {
@@ -52,9 +52,9 @@ fastify
  * using opts.data parse markdown direct literal
  */
 fastify
-  .register(require('fastify-markdown'), { data: `**BOLD**` })
+  .register(require('fastify-markdown'), { data: true })
   .get('/', (req, reply) => {
-      const md = reply.markdown()
+      const md = reply.markdown(`**BOLD**`)
       reply.send(md)
   })
   .listen(3000, err => {
@@ -98,24 +98,18 @@ fastify
 
 ## Options (Optional)
 
-**src** (boolean | string)
-
-true: Means to resolve the markdown file
-the .md file path.
-If the `data` option is set, this option will be ignored.
-
-**data** (boolean | string)
-
-true: Means to resolve the markdown data
-or a string that conforms to the markdown syntax
-
-**markedOptions** (object)
-
-marked options used
+* **src** (boolean | string)
+  * `true`: Means to resolve the markdown file.
+  * `string`(deprecated): the .md file path.If the `data` option is set, this option will be ignored.
+* **data** (boolean | string)
+  * `true`: Means to resolve the markdown data.
+  * `string`(deprecated): or a string that conforms to the markdown syntax.
+* **markedOptions** (object)
+  * marked options used
 
 See [marked](https://github.com/markedjs/marked) and [fastify](https://github.com/fastify/fastify) for more options
 
-All options are optional.
+All options are optional. in this case as if using `opts.data`.
 
 ## License
 

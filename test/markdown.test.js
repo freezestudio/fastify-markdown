@@ -121,3 +121,54 @@ test('Should markdown without "opts" is', t => {
     t.strictEqual(res.payload.trim(), `<p><strong>BOLD</strong></p>`)
   })
 })
+
+test('Should markdown without "opts" and "markdown" method with "md" param is', t => {
+  t.plan(2)
+  const fastify = Fastify()
+  fastify.register(plugin /*, opts */)
+  fastify.get('/', (req, reply) => {
+    const md = reply.markdown(`**BOLD**`)
+    reply.send(md)
+  })
+  fastify.inject({
+    url: '/',
+    method: 'GET'
+  }, (err, res) => {
+    t.error(err)
+    t.strictEqual(res.payload.trim(), `<p><strong>BOLD</strong></p>`)
+  })
+})
+
+test('Should markdown with "opts.data" and "markdown" method with "md" param the result is', t => {
+  t.plan(2)
+  const fastify = Fastify()
+  fastify.register(plugin, {data: '**DATA**'})
+  fastify.get('/', (req, reply) => {
+    const md = reply.markdown(`**BOLD**`)
+    reply.send(md)
+  })
+  fastify.inject({
+    url: '/',
+    method: 'GET'
+  }, (err, res) => {
+    t.error(err)
+    t.strictEqual(res.payload.trim(), `<p><strong>BOLD</strong></p>`)
+  })
+})
+
+test('Should markdown with "opts.data" and "opts.src" is', t => {
+  t.plan(2)
+  const fastify = Fastify()
+  fastify.register(plugin, {src: path.join(__dirname, '..', 'Readme.md'), data: true})
+  fastify.get('/', (req, reply) => {
+    const md = reply.markdown(`**BOLD**`)
+    reply.send(md)
+  })
+  fastify.inject({
+    url: '/',
+    method: 'GET'
+  }, (err, res) => {
+    t.error(err)
+    t.strictEqual(res.payload.trim(), `<p><strong>BOLD</strong></p>`)
+  })
+})

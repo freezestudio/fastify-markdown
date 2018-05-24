@@ -6,7 +6,7 @@ const marked = require('marked')
 
 const fp = require('fastify-plugin')
 
-function fastifymarkdown (fastify, opts, done) {
+function fastifyMarkdown (fastify, opts, done) {
   if (typeof opts === 'function') {
     done = opts
     opts = undefined
@@ -14,22 +14,30 @@ function fastifymarkdown (fastify, opts, done) {
 
   const markedOptions = opts.markedOptions || {}
 
+  function none (obj) {
+    if (obj === undefined) return true
+    if (obj && Object.getOwnPropertyNames(obj).length === 0) return true
+    return false
+  }
+
+  function have (obj) {
+    return !!obj
+  }
+
   function asyncFileMarked (src, option) {
     const read = util.promisify(fs.readFile)
     return read(src, 'utf8').then(data => { return marked(data, option) }, err => { return err })
   }
 
   fastify.decorateReply('markdown', function (md) {
-    if (opts === undefined && md === undefined) return marked
-    if (opts === undefined && md) opts = {data: md}
-    if (opts && Object.getOwnPropertyNames(opts).length === 0 && md === undefined) return marked
-    if (opts && Object.getOwnPropertyNames(opts).length === 0 && md) opts.data = md
+    if (none(opts) && none(md)) return marked
+    if (none(opts) && have(md)) opts = {data: md}
 
     if (opts.data) {
-      if (md === undefined && typeof opts.data === 'string') md = opts.data
+      if (none(md) && typeof opts.data === 'string') md = opts.data
       return marked(md, markedOptions)
     } else if (opts.src) {
-      if (md === undefined && typeof opts.src === 'string') md = opts.src
+      if (none(md) && typeof opts.src === 'string') md = opts.src
       return asyncFileMarked(md, markedOptions)
     } else if (opts.markedOptions) {
       return marked.setOptions(markedOptions)
@@ -41,7 +49,7 @@ function fastifymarkdown (fastify, opts, done) {
   done()
 }
 
-module.exports = fp(fastifymarkdown, {
+module.exports = fp(fastifyMarkdown, {
   fastify: '>=1.4.0',
   name: 'fastify-markdown'
 })
