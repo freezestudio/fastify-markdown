@@ -24,6 +24,10 @@ function fastifyMarkdown (fastify, opts, done) {
     return !!obj
   }
 
+  function isString (str) {
+    return typeof str === 'string'
+  }
+
   function asyncFileMarked (src, option) {
     const read = util.promisify(fs.readFile)
     return read(src, 'utf8').then(data => { return marked(data, option) }, err => { return err })
@@ -34,10 +38,10 @@ function fastifyMarkdown (fastify, opts, done) {
     if (none(opts) && have(md)) opts = {data: md}
 
     if (opts.data) {
-      if (none(md) && typeof opts.data === 'string') md = opts.data
+      if (none(md) && isString(opts.data)) md = opts.data
       return marked(md, markedOptions)
     } else if (opts.src) {
-      if (none(md) && typeof opts.src === 'string') md = opts.src
+      if (none(md) && isString(opts.src)) md = opts.src
       return asyncFileMarked(md, markedOptions)
     } else if (opts.markedOptions) {
       return marked.setOptions(markedOptions)

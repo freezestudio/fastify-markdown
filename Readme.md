@@ -111,6 +111,9 @@ See [marked](https://github.com/markedjs/marked) and [fastify](https://github.co
 
 All options are optional. in this case as if using `opts.data`.
 
+> **Note**
+> Can be set to any option other than those listed above, in which case the internal markdown parser will be returned.
+
 ## License
 
 Licensed under [MIT](./LICENSE).

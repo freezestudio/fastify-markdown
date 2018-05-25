@@ -10,10 +10,10 @@ const fastify = require('fastify')({
  */
 // fastify
 //   .register(require('../'), {
-//     src: path.join(__dirname, '..', 'Readme.md'), markedOptions: {gfm: false}
+//     src: true, markedOptions: {gfm: false}
 //   })
 //   .get('/', (req, reply) => {
-//     return reply.markdown()
+//     return reply.markdown(path.join(__dirname, '..', 'Readme.md'))
 //   })
 //   .listen(3000, err => {
 //     if (err) throw err
