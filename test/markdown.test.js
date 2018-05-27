@@ -172,3 +172,20 @@ test('Should markdown with "opts.data" and "opts.src" is', t => {
     t.strictEqual(res.payload.trim(), `<p><strong>BOLD</strong></p>`)
   })
 })
+
+test('Should markdown with "opts" but isnot [data,src,markedOptions] is', t => {
+  t.plan(2)
+  const fastify = Fastify()
+  fastify.register(plugin, {anything: 'anything'})
+  fastify.get('/', (req, reply) => {
+    const md = reply.markdown().parse(`**BOLD**`)
+    reply.send(md)
+  })
+  fastify.inject({
+    url: '/',
+    method: 'GET'
+  }, (err, res) => {
+    t.error(err)
+    t.strictEqual(res.payload.trim(), `<p><strong>BOLD</strong></p>`)
+  })
+})
