@@ -39,5 +39,6 @@
     "snazzy": "^7.1.1",
     "standard": "^11.0.1",
     "tap": "^12.0.1"
-  }
+  },
+  "types": "./fastify/index.d.ts"
 }
