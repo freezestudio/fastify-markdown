@@ -114,6 +114,8 @@ All options are optional. in this case as if using `opts.data`.
 > **Note**
 > Can be set to any option other than those listed above, in which case the internal markdown parser will be returned.
 
+Typescript usage see [wiki](https://github.com/freezestudio/fastify-markdown/wiki)
+
 ## License
 
 Licensed under [MIT](./LICENSE).
