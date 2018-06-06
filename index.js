@@ -30,7 +30,7 @@ function fastifyMarkdown (fastify, opts, done) {
 
   function asyncFileMarked (src, option) {
     const read = util.promisify(fs.readFile)
-    return read(src, 'utf8').then(data => { return marked(data, option) }, err => { return err })
+    return read(src, 'utf8').then(data => marked(data, option), err => err)
   }
 
   fastify.decorateReply('markdown', function (md) {
