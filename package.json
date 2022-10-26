@@ -1,6 +1,6 @@
 {
   "name": "fastify-markdown",
-  "version": "0.4.0",
+  "version": "0.4.1",
   "description": "Plugin for markdown parser",
   "main": "index.js",
   "scripts": {
@@ -27,7 +27,7 @@
   "homepage": "https://github.com/freezestudio/fastify-markdown#readme",
   "dependencies": {
     "fastify-plugin": "^1.0.1",
-    "marked": "^0.3.19"
+    "marked": "^4.1.1"
   },
   "devDependencies": {
     "coveralls": "^3.0.1",
