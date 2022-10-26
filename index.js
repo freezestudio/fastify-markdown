@@ -30,23 +30,27 @@ function fastifyMarkdown (fastify, opts, done) {
 
   function asyncFileMarked (src, option) {
     const read = util.promisify(fs.readFile)
-    return read(src, 'utf8').then(data => marked(data, option), err => err)
+    return read(src, 'utf8').then(
+      (data) => {
+        return marked.marked(data, option)
+      },
+      (err) => err
+    )
   }
 
   fastify.decorateReply('markdown', function (md) {
     if (none(opts) && none(md)) return marked
-    if (none(opts) && have(md)) opts = {data: md}
-
+    if (none(opts) && have(md)) opts = { data: md }
     if (opts.data) {
       if (none(md) && isString(opts.data)) md = opts.data
-      return marked(md, markedOptions)
+      return marked.marked(md, markedOptions)
     } else if (opts.src) {
       if (none(md) && isString(opts.src)) md = opts.src
       return asyncFileMarked(md, markedOptions)
     } else if (opts.markedOptions) {
-      return marked.setOptions(markedOptions)
+      return marked.marked.setOptions(markedOptions)
     } else {
-      return marked
+      return marked.marked
     }
   })
 
