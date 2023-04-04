@@ -27,7 +27,7 @@
   "homepage": "https://github.com/freezestudio/fastify-markdown#readme",
   "dependencies": {
     "fastify-plugin": "^1.0.1",
-    "marked": "^0.3.19"
+    "marked": "^4.3.0"
   },
   "devDependencies": {
     "coveralls": "^3.0.1",
