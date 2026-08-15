@@ -1,15 +1,16 @@
 # fastify-markdown
 
-[![Greenkeeper badge](https://badges.greenkeeper.io/fastify/fastify-plugin.svg)](https://greenkeeper.io/)
-
 [![js-standard-style](https://img.shields.io/badge/code%20style-standard-brightgreen.svg?style=flat)](http://standardjs.com/)
-[![Build Status](https://travis-ci.org/freezestudio/fastify-markdown.svg?branch=master)](https://travis-ci.org/freezestudio/fastify-markdown)
+[![CI](https://github.com/freezestudio/fastify-markdown/actions/workflows/ci.yml/badge.svg)](https://github.com/freezestudio/fastify-markdown/actions/workflows/ci.yml)
+[![npm](https://img.shields.io/npm/v/fastify-markdown.svg)](https://www.npmjs.com/package/fastify-markdown)
 
-`fastify-markdown` is a plugin for [Fastify](https://github.com/fastify/fastify) parse markdown code or file.
+`fastify-markdown` is a plugin for [Fastify](https://github.com/fastify/fastify) (v5+) to parse markdown code or files.
 
 ## Install
 
-npm install --save fastify-markdown
+```bash
+npm install fastify-markdown
+```
 
 ## Usage
 
@@ -25,7 +26,7 @@ fastify
   .get('/', (req, reply) => {
     return reply.markdown(path.join(__dirname, '..', 'Readme.md'))
   })
-  .listen(3000, err => {
+  .listen({ port: 3000 }, err => {
     if (err) throw err
     else console.log('server running on http://localhost:3000 ...')
   })
@@ -43,7 +44,7 @@ fastify
     const md = await reply.markdown(path.join(__dirname, '..', 'Readme.md'))
     return md
   })
-  .listen(3000, err => {
+  .listen({ port: 3000 }, err => {
     if (err) throw err
     else console.log('server running on http://localhost:3000 ...')
   })
@@ -57,7 +58,7 @@ fastify
       const md = reply.markdown(`**BOLD**`)
       reply.send(md)
   })
-  .listen(3000, err => {
+  .listen({ port: 3000 }, err => {
       if (err) throw err
       else console.log('server running on http://localhost:3000 ...')
   })
@@ -75,7 +76,7 @@ fastify
       const md = reply.markdown('**BOLD**')
       reply.send(md)
   })
-  .listen(3000, err => {
+  .listen({ port: 3000 }, err => {
       if (err) throw err
       else console.log('server running on http://localhost:3000 ...')
   })
@@ -84,12 +85,12 @@ fastify
  * using marked as object see:https://marked.js.org/
  */
 fastify
-  .register(require('fastify-markdown'), /*non options or other*/)
+  .register(require('fastify-markdown') /*non options or other*/)
   .get('/', (req, reply) => {
       const md = reply.markdown().parse('**bold title**')
       reply.send(md)
   })
-  .listen(3000, err => {
+  .listen({ port: 3000 }, err => {
       if (err) throw err
       else console.log('server running on http://localhost:3000 ...')
   })
@@ -114,7 +115,7 @@ All options are optional. in this case as if using `opts.data`.
 > **Note**
 > Can be set to any option other than those listed above, in which case the internal markdown parser will be returned.
 
-Typescript usage see [wiki](https://github.com/freezestudio/fastify-markdown/wiki)
+TypeScript usage see [wiki](https://github.com/freezestudio/fastify-markdown/wiki)
 
 ## License
 

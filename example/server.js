@@ -1,3 +1,5 @@
+'use strict'
+
 const path = require('path')
 const fastify = require('fastify')({
   logger: {
@@ -10,71 +12,60 @@ const fastify = require('fastify')({
  */
 // fastify
 //   .register(require('../'), {
-//     src: true, markedOptions: {gfm: false}
+//     src: true, markedOptions: { gfm: false }
 //   })
 //   .get('/', (req, reply) => {
 //     return reply.markdown(path.join(__dirname, '..', 'Readme.md'))
 //   })
-//   .listen(3000, err => {
-//     if (err) throw err
-//     else console.log('server running on http://localhost:3000 ...')
-//   })
+//   .listen({ port: 3000 })
+//   .then(() => console.log('server running on http://localhost:3000 ...'))
 
 /**
  * using opts.src = true
  */
 fastify
   .register(require('../'), {
-    src: true, markedOptions: {gfm: false}
+    src: true, markedOptions: { gfm: false }
   })
   .get('/', (req, reply) => {
     return reply.markdown(path.join(__dirname, '..', 'Readme.md'))
-  })
-  .listen(3000, err => {
-    if (err) throw err
-    else console.log('server running on http://localhost:3000 ...')
   })
 
 /**
  * using opts.data = true
  */
 // fastify
-// .register(require('../'), {
-//   data: true, markedOptions: {gfm: false}
-// })
-// .get('/', (req, reply) => {
-//   const md = reply.markdown('**BOLD**')
-//   reply.send(md)
-// })
-// .listen(3000, err => {
-//   if (err) throw err
-//   else console.log('server running on http://localhost:3000 ...')
-// })
+//   .register(require('../'), {
+//     data: true, markedOptions: { gfm: false }
+//   })
+//   .get('/', (req, reply) => {
+//     const md = reply.markdown('**BOLD**')
+//     reply.send(md)
+//   })
 
 /**
  * default marked data
  */
 // fastify
-// .register(require('../'))
-// .get('/', (req, reply) => {
-//   const md = reply.markdown('**BOLD**')
-//   reply.send(md)
-// })
-// .listen(3000, err => {
-//   if (err) throw err
-//   else console.log('server running on http://localhost:3000 ...')
-// })
+//   .register(require('../'))
+//   .get('/', (req, reply) => {
+//     const md = reply.markdown('**BOLD**')
+//     reply.send(md)
+//   })
 
 /**
  * using internal marked and options
  */
 // fastify
-// .register(require('../'))
-// .get('/', (req, reply) => {
-//   const md = reply.markdown().parse('**BOLD**', {breaks: true})
-//   reply.send(md)
-// })
-// .listen(3000, err => {
-//   if (err) throw err
-//   else console.log('server running on http://localhost:3000 ...')
-// })
+//   .register(require('../'))
+//   .get('/', (req, reply) => {
+//     const md = reply.markdown().parse('**BOLD**', { breaks: true })
+//     reply.send(md)
+//   })
+
+fastify.listen({ port: 3000 })
+  .then(() => console.log('server running on http://localhost:3000 ...'))
+  .catch(err => {
+    fastify.log.error(err)
+    process.exit(1)
+  })

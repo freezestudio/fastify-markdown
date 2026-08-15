@@ -57,9 +57,11 @@ profile*
 *clinic*
 *flamegraph*
 
+# tap 21 coverage output
+.tap/
+
 # lock files
 yarn.lock
-package-lock.json
 
 # generated code
 examples/typescript-server.js

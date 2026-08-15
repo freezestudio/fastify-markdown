@@ -1,50 +1,45 @@
 'use strict'
 
 const path = require('path')
-const test = require('tap').test
+const { test } = require('tap')
 const Fastify = require('fastify')
 const plugin = require('../')
 
-test('Should markdowon with "opts.data" is', t => {
-  t.plan(2)
+test('Should markdown with "opts.data" is', async t => {
   const fastify = Fastify()
   fastify.register(plugin, {
-    data: `**BOLD**`
+    data: '**BOLD**'
   })
   fastify.get('/', (req, reply) => {
     const md = reply.markdown()
     reply.send(md)
   })
-  fastify.inject({
+  const res = await fastify.inject({
     url: '/',
     method: 'GET'
-  }, (err, res) => {
-    t.error(err)
-    t.strictEqual(res.payload.trim(), `<p><strong>BOLD</strong></p>`)
   })
+  t.error(res.error)
+  t.equal(res.payload.trim(), '<p><strong>BOLD</strong></p>')
 })
 
-test('Should markdowon with "opts.data" and "opts.markedOptions" is', t => {
-  t.plan(2)
+test('Should markdown with "opts.data" and "opts.markedOptions" is', async t => {
   const fastify = Fastify()
   fastify.register(plugin, {
-    data: true, markedOptions: {gfm: false}
+    data: true, markedOptions: { gfm: false }
   })
   fastify.get('/', (req, reply) => {
-    const md = reply.markdown(`**BOLD**`)
+    const md = reply.markdown('**BOLD**')
     reply.send(md)
   })
-  fastify.inject({
+  const res = await fastify.inject({
     url: '/',
     method: 'GET'
-  }, (err, res) => {
-    t.error(err)
-    t.strictEqual(res.payload, `<p><strong>BOLD</strong></p>\n`)
   })
+  t.error(res.error)
+  t.equal(res.payload, '<p><strong>BOLD</strong></p>\n')
 })
 
-test('Should markdown with "opts.src" is', t => {
-  t.plan(2)
+test('Should markdown with "opts.src" is', async t => {
   const fastify = Fastify()
   fastify.register(plugin, {
     src: true
@@ -52,17 +47,15 @@ test('Should markdown with "opts.src" is', t => {
   fastify.get('/', (req, reply) => {
     return reply.markdown(path.join(__dirname, '..', 'Readme.md'))
   })
-  fastify.inject({
+  const res = await fastify.inject({
     url: '/',
     method: 'GET'
-  }, (err, res) => {
-    t.error(err)
-    t.ok(res.payload)
   })
+  t.error(res.error)
+  t.ok(res.payload)
 })
 
-test('Should markdown with "opts.src" is incorrect', t => {
-  t.plan(2)
+test('Should markdown with "opts.src" is incorrect', async t => {
   const fastify = Fastify()
   fastify.register(plugin, {
     src: 'empty'
@@ -74,17 +67,15 @@ test('Should markdown with "opts.src" is incorrect', t => {
       reply.send(err)
     })
   })
-  fastify.inject({
+  const res = await fastify.inject({
     url: '/',
     method: 'GET'
-  }, (err, res) => {
-    t.error(err)
-    t.strictEqual(JSON.parse(res.payload).statusCode, 500)
   })
+  t.error(res.error)
+  t.equal(JSON.parse(res.payload).statusCode, 500)
 })
 
-test('Should markdown with "opts.markedOptions" is', t => {
-  t.plan(2)
+test('Should markdown with "opts.markedOptions" is', async t => {
   const testOptions = {
     gfm: false
   }
@@ -96,96 +87,85 @@ test('Should markdown with "opts.markedOptions" is', t => {
     const gfm = reply.markdown().defaults.gfm
     reply.send(gfm)
   })
-  fastify.inject({
+  const res = await fastify.inject({
     url: '/',
     method: 'GET'
-  }, (err, res) => {
-    t.error(err)
-    t.equal(res.payload, 'false')
   })
+  t.error(res.error)
+  t.equal(res.payload, 'false')
 })
 
-test('Should markdown without "opts" is', t => {
-  t.plan(2)
+test('Should markdown without "opts" is', async t => {
   const fastify = Fastify()
   fastify.register(plugin /*, opts */)
   fastify.get('/', (req, reply) => {
-    const md = reply.markdown().parse(`**BOLD**`)
+    const md = reply.markdown().parse('**BOLD**')
     reply.send(md)
   })
-  fastify.inject({
+  const res = await fastify.inject({
     url: '/',
     method: 'GET'
-  }, (err, res) => {
-    t.error(err)
-    t.strictEqual(res.payload.trim(), `<p><strong>BOLD</strong></p>`)
   })
+  t.error(res.error)
+  t.equal(res.payload.trim(), '<p><strong>BOLD</strong></p>')
 })
 
-test('Should markdown without "opts" and "markdown" method with "md" param is', t => {
-  t.plan(2)
+test('Should markdown without "opts" and "markdown" method with "md" param is', async t => {
   const fastify = Fastify()
   fastify.register(plugin /*, opts */)
   fastify.get('/', (req, reply) => {
-    const md = reply.markdown(`**BOLD**`)
+    const md = reply.markdown('**BOLD**')
     reply.send(md)
   })
-  fastify.inject({
+  const res = await fastify.inject({
     url: '/',
     method: 'GET'
-  }, (err, res) => {
-    t.error(err)
-    t.strictEqual(res.payload.trim(), `<p><strong>BOLD</strong></p>`)
   })
+  t.error(res.error)
+  t.equal(res.payload.trim(), '<p><strong>BOLD</strong></p>')
 })
 
-test('Should markdown with "opts.data" and "markdown" method with "md" param the result is', t => {
-  t.plan(2)
+test('Should markdown with "opts.data" and "markdown" method with "md" param the result is', async t => {
   const fastify = Fastify()
-  fastify.register(plugin, {data: '**DATA**'})
+  fastify.register(plugin, { data: '**DATA**' })
   fastify.get('/', (req, reply) => {
-    const md = reply.markdown(`**BOLD**`)
+    const md = reply.markdown('**BOLD**')
     reply.send(md)
   })
-  fastify.inject({
+  const res = await fastify.inject({
     url: '/',
     method: 'GET'
-  }, (err, res) => {
-    t.error(err)
-    t.strictEqual(res.payload.trim(), `<p><strong>BOLD</strong></p>`)
   })
+  t.error(res.error)
+  t.equal(res.payload.trim(), '<p><strong>BOLD</strong></p>')
 })
 
-test('Should markdown with "opts.data" and "opts.src" is', t => {
-  t.plan(2)
+test('Should markdown with "opts.data" and "opts.src" is', async t => {
   const fastify = Fastify()
-  fastify.register(plugin, {src: path.join(__dirname, '..', 'Readme.md'), data: true})
+  fastify.register(plugin, { src: path.join(__dirname, '..', 'Readme.md'), data: true })
   fastify.get('/', (req, reply) => {
-    const md = reply.markdown(`**BOLD**`)
+    const md = reply.markdown('**BOLD**')
     reply.send(md)
   })
-  fastify.inject({
+  const res = await fastify.inject({
     url: '/',
     method: 'GET'
-  }, (err, res) => {
-    t.error(err)
-    t.strictEqual(res.payload.trim(), `<p><strong>BOLD</strong></p>`)
   })
+  t.error(res.error)
+  t.equal(res.payload.trim(), '<p><strong>BOLD</strong></p>')
 })
 
-test('Should markdown with "opts" but isnot [data,src,markedOptions] is', t => {
-  t.plan(2)
+test('Should markdown with "opts" but isnot [data,src,markedOptions] is', async t => {
   const fastify = Fastify()
-  fastify.register(plugin, {anything: 'anything'})
+  fastify.register(plugin, { anything: 'anything' })
   fastify.get('/', (req, reply) => {
-    const md = reply.markdown().parse(`**BOLD**`)
+    const md = reply.markdown().parse('**BOLD**')
     reply.send(md)
   })
-  fastify.inject({
+  const res = await fastify.inject({
     url: '/',
     method: 'GET'
-  }, (err, res) => {
-    t.error(err)
-    t.strictEqual(res.payload.trim(), `<p><strong>BOLD</strong></p>`)
   })
+  t.error(res.error)
+  t.equal(res.payload.trim(), '<p><strong>BOLD</strong></p>')
 })
