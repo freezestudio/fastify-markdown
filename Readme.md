@@ -24,7 +24,7 @@ const fastify = require('fastify')({ logger: { level: 'trace' } })
 fastify
   .register(require('fastify-markdown'), { src: true })
   .get('/', (req, reply) => {
-    return reply.markdown(path.join(__dirname, '..', 'Readme.md'))
+    return reply.markdown(path.join(__dirname, 'Readme.md'))
   })
   .listen({ port: 3000 }, err => {
     if (err) throw err
@@ -37,7 +37,7 @@ fastify
  * async using opts.src from file
  */
 fastify
-  .register(require('../'), {
+  .register(require('fastify-markdown'), {
     src: true, markedOptions: { gfm: false }
   })
   .get('/', async (req, reply) => {

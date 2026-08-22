@@ -7,13 +7,9 @@ const { marked } = require('marked')
 const fp = require('fastify-plugin')
 
 function none (obj) {
-  if (obj === undefined) return true
-  if (obj && Object.getOwnPropertyNames(obj).length === 0) return true
+  if (obj == null) return true
+  if (typeof obj === 'object' && Object.getOwnPropertyNames(obj).length === 0) return true
   return false
-}
-
-function have (obj) {
-  return !!obj
 }
 
 function isString (str) {
@@ -22,15 +18,17 @@ function isString (str) {
 
 function asyncFileMarked (src, option) {
   const read = util.promisify(fs.readFile)
-  return read(src, 'utf8').then(data => marked.parse(data, option), err => err)
+  return read(src, 'utf8').then(data => marked.parse(data, option))
 }
 
 async function fastifyMarkdown (fastify, opts) {
   const markedOptions = opts.markedOptions || {}
 
   fastify.decorateReply('markdown', function (md) {
-    if (none(opts) && none(md)) return marked
-    if (none(opts) && have(md)) opts = { data: md }
+    if (none(opts)) {
+      if (none(md)) return marked
+      return marked.parse(md, markedOptions)
+    }
 
     if (opts.data) {
       if (none(md) && isString(opts.data)) md = opts.data
@@ -40,9 +38,8 @@ async function fastifyMarkdown (fastify, opts) {
       return asyncFileMarked(md, markedOptions)
     } else if (opts.markedOptions) {
       return marked.setOptions(markedOptions)
-    } else {
-      return marked
     }
+    return marked
   })
 }
 
